@@ -1,0 +1,26 @@
+{
+  "name": "blackjack-game",
+  "version": "1.0.0",
+  "description": "A simple Blackjack game implemented in TypeScript.",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "ts-node": "^10.0.0",
+    "typescript": "^4.0.0"
+  },
+  "devDependencies": {
+    "jest": "^27.0.0",
+    "ts-jest": "^27.0.0",
+    "@types/jest": "^27.0.0"
+  },
+  "keywords": [
+    "blackjack",
+    "game",
+    "typescript"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

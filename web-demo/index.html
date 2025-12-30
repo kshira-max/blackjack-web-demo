@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack Demo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ブラックジャック</h1>
+        <div id="game-area">
+            <div class="hand-area" id="dealer-area">
+                <h2>ディーラー</h2>
+                <div id="dealer-hand" class="cards"></div>
+                <div id="dealer-score" class="score"></div>
+            </div>
+            <div class="message-area" id="message"></div>
+            <div class="hand-area" id="player-area">
+                <h2>プレイヤー</h2>
+                <div id="player-hand" class="cards"></div>
+                <div id="player-score" class="score"></div>
+            </div>
+            <div class="controls">
+                <button id="btn-hit">ヒット</button>
+                <button id="btn-stand">スタンド</button>
+                <button id="btn-reset" style="display:none;">もう一度遊ぶ</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
