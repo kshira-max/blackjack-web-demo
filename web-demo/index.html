@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blackjack Demo</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="container">
         <h1>ブラックジャック</h1>
@@ -15,6 +17,10 @@
                 <div id="dealer-hand" class="cards"></div>
                 <div id="dealer-score" class="score"></div>
             </div>
+            <div class="stats-area">
+                <div class="stat-box">持金: $<span id="balance">1000</span></div>
+                <div class="stat-box">賭け金: $<span id="current-bet">0</span></div>
+            </div>
             <div class="message-area" id="message"></div>
             <div class="hand-area" id="player-area">
                 <h2>プレイヤー</h2>
@@ -22,12 +28,21 @@
                 <div id="player-score" class="score"></div>
             </div>
             <div class="controls">
-                <button id="btn-hit">ヒット</button>
-                <button id="btn-stand">スタンド</button>
+                <div id="betting-controls">
+                    <button class="btn-bet" data-amount="10">$10</button>
+                    <button class="btn-bet" data-amount="50">$50</button>
+                    <button class="btn-bet" data-amount="100">$100</button>
+                    <button id="btn-deal">ディール開始</button>
+                </div>
+                <div id="action-controls" style="display:none;">
+                    <button id="btn-hit">ヒット</button>
+                    <button id="btn-stand">スタンド</button>
+                </div>
                 <button id="btn-reset" style="display:none;">もう一度遊ぶ</button>
             </div>
         </div>
     </div>
     <script src="script.js"></script>
 </body>
+
 </html>

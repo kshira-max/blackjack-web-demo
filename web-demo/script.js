@@ -5,19 +5,56 @@ let deck = [];
 let dealerHand = [];
 let playerHand = [];
 let gameOver = false;
+let balance = 1000;
+let currentBet = 0;
 
 const dealerHandEl = document.getElementById('dealer-hand');
 const playerHandEl = document.getElementById('player-hand');
 const dealerScoreEl = document.getElementById('dealer-score');
 const playerScoreEl = document.getElementById('player-score');
 const messageEl = document.getElementById('message');
+const balanceEl = document.getElementById('balance');
+const betEl = document.getElementById('current-bet');
+
 const btnHit = document.getElementById('btn-hit');
 const btnStand = document.getElementById('btn-stand');
 const btnReset = document.getElementById('btn-reset');
+const btnDeal = document.getElementById('btn-deal');
+const bettingControls = document.getElementById('betting-controls');
+const actionControls = document.getElementById('action-controls');
 
+// Event Listeners
 btnHit.addEventListener('click', hit);
 btnStand.addEventListener('click', stand);
-btnReset.addEventListener('click', initGame);
+btnReset.addEventListener('click', () => {
+    bettingControls.style.display = 'block';
+    actionControls.style.display = 'none';
+    btnReset.style.display = 'none';
+    currentBet = 0;
+    messageEl.innerText = '賭け金を選択してください';
+    updateDisplay();
+});
+
+btnDeal.addEventListener('click', () => {
+    if (currentBet <= 0) {
+        messageEl.innerText = '賭け金を選択してください';
+        return;
+    }
+    initGame();
+});
+
+document.querySelectorAll('.btn-bet').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const amount = parseInt(e.target.dataset.amount);
+        if (balance >= amount) {
+            balance -= amount;
+            currentBet += amount;
+            updateDisplay();
+        } else {
+            messageEl.innerText = '残高が足りません！';
+        }
+    });
+});
 
 function createDeck() {
     deck = [];
@@ -63,11 +100,15 @@ function createCardElement(card) {
     return div;
 }
 
+function updateDisplay() {
+    balanceEl.innerText = balance;
+    betEl.innerText = currentBet;
+}
+
 function render() {
     dealerHandEl.innerHTML = '';
     playerHandEl.innerHTML = '';
 
-    // Dealer
     dealerHand.forEach((card, index) => {
         if (index === 0 && !gameOver) {
             const hiddenCard = document.createElement('div');
@@ -79,23 +120,16 @@ function render() {
     });
 
     if (gameOver) {
-        const score = calculateScore(dealerHand);
-        dealerScoreEl.innerText = `スコア: ${score}`;
+        dealerScoreEl.innerText = `スコア: ${calculateScore(dealerHand)}`;
     } else {
         dealerScoreEl.innerText = `スコア: ?`;
     }
 
-    // Player
-    playerHand.forEach(card => {
-        playerHandEl.appendChild(createCardElement(card));
-    });
-    const playerScore = calculateScore(playerHand);
-    playerScoreEl.innerText = `スコア: ${playerScore}`;
+    playerHand.forEach(card => playerHandEl.appendChild(createCardElement(card)));
+    playerScoreEl.innerText = `スコア: ${calculateScore(playerHand)}`;
 
-    // Buttons
-    btnHit.disabled = gameOver;
-    btnStand.disabled = gameOver;
     btnReset.style.display = gameOver ? 'inline-block' : 'none';
+    updateDisplay();
 }
 
 function initGame() {
@@ -105,22 +139,21 @@ function initGame() {
     playerHand = [deck.pop(), deck.pop()];
     gameOver = false;
     messageEl.innerText = '';
-    render();
-    
+
+    bettingControls.style.display = 'none';
+    actionControls.style.display = 'block';
+
     if (calculateScore(playerHand) === 21) {
-        messageEl.innerText = "ブラックジャック！あなたの勝ちです！";
-        gameOver = true;
-        render();
+        endGame("ブラックジャック！あなたの勝ちです！", "win_bj");
     }
+    render();
 }
 
 function hit() {
     if (gameOver) return;
     playerHand.push(deck.pop());
-    const score = calculateScore(playerHand);
-    if (score > 21) {
-        messageEl.innerText = "バースト！あなたの負けです。";
-        gameOver = true;
+    if (calculateScore(playerHand) > 21) {
+        endGame("バースト！あなたの負けです。", "lose");
     }
     render();
 }
@@ -128,26 +161,44 @@ function hit() {
 function stand() {
     if (gameOver) return;
     gameOver = true;
-    
+
     let dealerScore = calculateScore(dealerHand);
     while (dealerScore < 17) {
         dealerHand.push(deck.pop());
         dealerScore = calculateScore(dealerHand);
     }
-    
-    render(); // Reveal dealer card
-    
+
     const playerScore = calculateScore(playerHand);
-    
     if (dealerScore > 21) {
-        messageEl.innerText = "ディーラーがバースト！あなたの勝ちです！";
+        endGame("ディーラーがバースト！あなたの勝ちです！", "win");
     } else if (dealerScore > playerScore) {
-        messageEl.innerText = "ディーラーの勝ちです。";
+        endGame("ディーラーの勝ちです。", "lose");
     } else if (dealerScore < playerScore) {
-        messageEl.innerText = "あなたの勝ちです！";
+        endGame("あなたの勝ちです！", "win");
     } else {
-        messageEl.innerText = "引き分けです。";
+        endGame("引き分けです。", "push");
+    }
+    render();
+}
+
+function endGame(msg, result) {
+    gameOver = true;
+    messageEl.innerText = msg;
+
+    if (result === "win") {
+        balance += currentBet * 2;
+    } else if (result === "win_bj") {
+        balance += Math.floor(currentBet * 2.5);
+    } else if (result === "push") {
+        balance += currentBet;
+    }
+    // "lose" の場合は balance は既に減っているので何もしない
+
+    if (balance <= 0 && result === "lose") {
+        messageEl.innerText += " 残高がなくなりました。ゲームオーバーです。";
+        balance = 1000; // 自動リセット
     }
 }
 
-initGame();
+messageEl.innerText = '賭け金を選択してください';
+updateDisplay();

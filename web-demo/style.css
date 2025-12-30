@@ -13,7 +13,7 @@ body {
     background-color: #34495e;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .hand-area {
@@ -43,7 +43,7 @@ body {
     align-items: center;
     font-size: 20px;
     font-weight: bold;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
     position: relative;
 }
 
@@ -57,6 +57,22 @@ body {
     border: 2px solid white;
 }
 
+.stats-area {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 10px 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.stat-box {
+    background-color: #34495e;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid #f1c40f;
+}
+
 .controls button {
     font-size: 18px;
     padding: 10px 20px;
@@ -67,14 +83,29 @@ body {
     border-radius: 5px;
     color: #2c3e50;
     font-weight: bold;
+    transition: transform 0.1s;
+}
+
+.controls button:active {
+    transform: scale(0.95);
+}
+
+.btn-bet {
+    background-color: #e67e22 !important;
+    color: white !important;
+}
+
+#btn-deal {
+    background-color: #2ecc71 !important;
+    color: white !important;
 }
 
 .controls button:hover {
-    background-color: #f39c12;
+    filter: brightness(1.1);
 }
 
 .controls button:disabled {
-    background-color: #bdc3c7;
+    background-color: #bdc3c7 !important;
     cursor: not-allowed;
 }
 
@@ -83,4 +114,5 @@ body {
     font-weight: bold;
     margin: 10px 0;
     min-height: 36px;
+    color: #f1c40f;
 }
